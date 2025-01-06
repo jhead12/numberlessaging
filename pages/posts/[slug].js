@@ -52,9 +52,13 @@ export default function PostPage({
           <h1 className="mb-12 text-3xl text-center md:text-5xl dark:text-white" data-sb-field-path="title">
             {frontMatter.title}
           </h1>
+
+        
+          
           {frontMatter.description && (
             <p className="mb-4 text-xl" data-sb-field-path="description">{frontMatter.description}</p>
           )}
+         
         </header>
         <main>
           <article className="prose dark:prose-dark" data-sb-field-path="markdown_content">
