@@ -27,11 +27,20 @@ export default function Index({ posts, globalData }) {
                 as={`/posts/${post.filePath.replace(/\.mdx?$/, '')}`}
                 href={`/posts/[slug]`}
                 className="block px-6 py-6 lg:py-10 lg:px-16 focus:outline-none focus:ring-4">
-
+                  {/* Render Featured Image */}
+              {post.data.primaryImage && (
+                  <img
+                    src={post.data.primaryImage}
+                    alt={post.data.title}
+                    className="mb-4 w-full rounded-lg object-cover"
+                    style={{ height: '200px' }}
+                  />
+                )}
                 {post.data.date && (
                   <p className="mb-3 font-bold uppercase opacity-60" data-sb-field-path="date">
                     {post.data.date}
                   </p>
+                 
                 )}
                 <h2 className="text-2xl md:text-3xl" data-sb-field-path="title">{post.data.title}</h2>
                 {post.data.description && (
@@ -39,6 +48,8 @@ export default function Index({ posts, globalData }) {
                     {post.data.description}
                   </p>
                 )}
+                                    <img width="20px" href="/components/numberlessagaing_logo.png"></img>
+
                 <ArrowIcon className="mt-4" />
 
               </Link>
