@@ -6,6 +6,7 @@ export default defineStackbitConfig({
     stackbitVersion: '~0.6.0',
     ssgName: 'nextjs',
     nodeVersion: '18',
+   
     contentSources: [
         new GitContentSource({
             rootPath: __dirname,
@@ -20,6 +21,8 @@ export default defineStackbitConfig({
                         { name: "title", type: "string", required: true, default: 'Post Title' }, 
                         { name: "description", type: "string", default: 'Post description goes here' },
                         { name: "date", type: "date", required: true },
+                        { name: 'title', type: 'string', required: true },
+                        { name: 'body', type: 'markdown' },
                     ]
                   }
             ],
@@ -30,5 +33,6 @@ export default defineStackbitConfig({
                 publicPath: '/'
             }
         })
-    ]
+    ],
 });
+
