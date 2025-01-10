@@ -4,8 +4,12 @@ import logo from 'components/numberlessagaing_logo.png'; // Import the image fil
 import { motion } from "framer-motion";
 
 export default function Header({ name }) {
+
   return (
+    
+
     <header className="pt-20 pb-12">
+
       <div className="block w-20 h-12 mx-auto mb-5">
       
       <motion.button
@@ -26,5 +30,4 @@ export default function Header({ name }) {
         </Link>
       </p>
     </header>
-  );
-}
+  )}

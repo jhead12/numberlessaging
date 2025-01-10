@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import styles from './Layout.module.css';
 import { motion } from "framer-motion";
+import HeaderMenu from 'components/HeaderMenu'
+
 
 export function GradientBackground({ variant, className }) {
   const classes = classNames(
@@ -59,6 +61,7 @@ export default function Layout({ children }) {
   >
     <div className="relative pb-24 overflow-hidden">
       <div className="flex flex-col items-center w-full max-w-2xl mx-auto">
+      <HeaderMenu  />
         {children}
       </div>
     </div>

@@ -1,7 +1,4 @@
-![Netlify Next.js Blog Template designed by Bejamas](https://user-images.githubusercontent.com/43764894/223762618-62742b4e-9424-44a7-8e85-9f7e4e19db54.png)
-
-
-[![Deploy to Netlify Button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/nextjs-blog-theme)
+![Netlify Next.js Blog Template -> Numberless Aging](https://user-images.githubusercontent.com/43764894/223762618-62742b4e-9424-44a7-8e85-9f7e4e19db54.png)
 
 
 A customizable blog starter using:
@@ -12,11 +9,12 @@ A customizable blog starter using:
 - Built-in [MDX](https://mdxjs.com/) support
 - Includes modern design with dark & light themes
 
-![Preview of blog theme. Author named Jay Doe and blog's name is "Next.js Blog Theme" with one blog post](nextjs-blog-theme-preview.png)
+## Todo
+- Stretch the menu bar to wide screen
+- Implement the Wordpress and Graphql
+- Change the colors of the background or Add graphics
 
-[Take a gander at the demo.](https://bejamas-nextjs-blog.netlify.app)
 
-[Click here to watch the template walkthrough!](https://www.youtube.com/watch?v=63QZHs259dY)
 
 ## Table of Contents:
 
