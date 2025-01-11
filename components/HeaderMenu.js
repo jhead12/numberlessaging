@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { fetchCategories } from '../services/api/catagories';
-import HeaderMenu from '../components/menu';
+import HeaderMenu from './Menu';
 import i from '@fortawesome/fontawesome-svg-core';
 import Logo from "./Logo"
 
