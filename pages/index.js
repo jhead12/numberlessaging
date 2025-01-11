@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPosts } from '../utils/mdx-utils';
 
+import logo from '../components/Logo';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Layout, { GradientBackground } from '../components/Layout';
@@ -48,7 +49,7 @@ export default function Index({ posts, globalData }) {
                     {post.data.description}
                   </p>
                 )}
-                                    <img width="20px" href="/components/numberlessagaing_logo.png"></img>
+                                    {/* <img width="20px" href="/components/numberlessagaing_logo.png"></img> */}
 
                 <ArrowIcon className="mt-4" />
 

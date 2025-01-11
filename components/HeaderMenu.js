@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { fetchCategories } from '../services/api/catagories';
 import HeaderMenu from '../components/menu';
 import i from '@fortawesome/fontawesome-svg-core';
+import Logo from "./Logo"
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
@@ -20,7 +21,7 @@ const Header = () => {
     <header className="bg-white shadow w-full">
       <div className="container mx-auto flex items-center justify-between py-4">
         <div>
-          {/* <details className="relative">
+          <details className="relative">
             <summary className="flex items-center cursor-pointer">
               <svg className="w-10 h-10 text-primary-cool-75 hover:text-primary-cool-50">
                 <use href="#"></use>
@@ -29,31 +30,42 @@ const Header = () => {
                 <use href="#"></use>
               </svg>
             </summary>
-            <HeaderMenu categories={categories} />
-          </details> */}
+            {/* {/* <Link categories={categories} /> */}
+          </details>
           {/* Subscribe Button */}
           <div className="flex items-center space-x-4">
-            <button className="bg-primary text-white px-4 py-2 rounded">SUBSCRIBE</button>
+      
+            {/* <button className="bg-primary text-white px-4 py-2 rounded">SUBSCRIBE</button> */}
             <Link href="#" className="text-primary hover:text-primary-dark">
               {/* <svg className="w-6 h-6">
                 <use href="#"></use>
               </svg> */}
-              <i class="fi fi-brands-facebook"></i>
             </Link>
             <Link href="#" className="text-primary hover:text-primary-dark">
-              <svg className="w-6 h-6">
+              {/* <svg className="w-6 h-6">
                 <use href="#"></use>
-              </svg>
+              </svg> */}
             </Link>
+            
           </div>
+          <Link href="/advertiserDiscloure" >
           <button className="bg-transparent text-primary underline">Advertiser Disclosure</button>
+          </Link>
         </div>
+        {/* <Logo /> */}
+        
         {/* Centered Logo */}
-        <Link href="#" className="text-primary text-lg font-bold">
+        
+        <Link href="#" className="flex-1 flex justify-center text-primary text-lg font-bold">
+     
+                Numberless Aging
+        {/* <h1>Numberless Aging </h1> */}
+{/* 
           <svg className="w-12 h-12">
             <use href="#"></use>
-          </svg>
+          </svg> */}
         </Link>
+        
         {/* Search Button */}
         {/* <div className="relative">
           <form method="get" action="#" className="flex items-center">
