@@ -56,9 +56,8 @@ const Header = () => {
         
         {/* Centered Logo */}
         
-        <Link href="#" className="flex-1 flex justify-center text-primary text-lg font-bold">
+        <Link href="/" className="flex-1 flex justify-center text-primary text-lg font-bold">
      
-                Numberless Aging
         {/* <h1>Numberless Aging </h1> */}
 {/* 
           <svg className="w-12 h-12">
