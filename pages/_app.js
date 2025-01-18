@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    const publicRoutes = ['/', '/login', '/register'];
+    const publicRoutes = ['/', '/login', '/register', '/posts', '/posts/[slug]'];
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       if (!publicRoutes.includes(router.pathname)) {
