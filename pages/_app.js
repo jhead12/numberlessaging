@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    const publicRoutes = ['/', '/login', '/register', '/posts', '/posts/[slug]'];
+    const publicRoutes = ['/', '/login', '/register','/about', '/posts', '/posts/[slug]'];
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       if (!publicRoutes.includes(router.pathname)) {
@@ -26,9 +26,11 @@ function MyApp({ Component, pageProps }) {
             });
           } catch (err) {
             localStorage.removeItem('token');
+            localStorage.setItem('redirectTo', router.pathname);
             router.push('/login');
           }
         } else {
+          localStorage.setItem('redirectTo', router.pathname);
           router.push('/login');
         }
       }
@@ -40,10 +42,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
     <ApolloProvider client={client}> 
-    {/* <AnimatePresence mode="wait" initial={false}> */}
+    <AnimatePresence mode="wait" initial={false}>
     <span className="theme-bejamas" />
       <Component {...pageProps} />
-     
+     </AnimatePresence>
     </ApolloProvider>
     </>
   );
