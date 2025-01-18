@@ -7,6 +7,7 @@ import Logo from "./Logo"
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -21,15 +22,18 @@ const Header = () => {
     <header className="bg-white shadow w-full">
       <div className="container mx-auto flex items-center justify-between py-4">
         <div>
-          <details className="relative">
-            {/* <summary className="flex items-center cursor-pointer">
-              <svg className="w-10 h-10 text-primary-cool-75 hover:text-primary-cool-50">
-                <use href="/about"></use>
-              </svg>
-              <svg className="w-8 h-8 text-primary-cool-75 hover:text-primary-cool-50">
-                <use href="#"></use>
-              </svg>
-            </summary> */}
+          <details className="relative" open={menuOpen} onToggle={() => setMenuOpen(!menuOpen)}>
+            <summary className="flex items-center cursor-pointer">
+              {menuOpen ? (
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              ) : (
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+              )}
+            </summary>
             <div className="absolute top-0 right-0 z-10 w-48 py-2 mt-12 bg-white shadow-lg rounded-md">
               <Link href="/about" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">About</Link>
               <Link href="/featured-products" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Featured Products</Link>
@@ -42,7 +46,7 @@ const Header = () => {
           </details>
           {/* Subscribe Button */}
           <div className="flex items-center space-x-4">
-            <button className="bg-primary text-white px-4 py-2 rounded">SUBSCRIBE</button>
+            {/* <button className="bg-primary text-white px-4 py-2 rounded">SUBSCRIBE</button> */}
             <Link href="#" className="text-primary hover:text-primary-dark">
               {/* <svg className="w-6 h-6">
                 <use href="#"></use>
