@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getPosts } from '../utils/mdx-utils';
 import { useState } from 'react';
-
+import Image from 'next/image';
 import logo from '../components/Logo';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -43,7 +43,7 @@ export default function Index({ posts, globalData }) {
                 className="block px-6 py-6 lg:py-10 lg:px-16 focus:outline-none focus:ring-4">
                   {/* Render Featured Image */}
               {post.data.primaryImage && (
-                  <img
+                  <Image
                     src={post.data.primaryImage}
                     alt={post.data.title}
                     className="mb-4 w-full rounded-lg object-cover"
@@ -62,7 +62,7 @@ export default function Index({ posts, globalData }) {
                     {post.data.description}
                   </p>
                 )}
-                                    {/* <img width="20px" href="/components/numberlessagaing_logo.png"></img> */}
+                                    {/* <Image width="20px" href="/components/numberlessagaing_logo.png"></img> */}
 
                 <ArrowIcon className="mt-4" />
 
