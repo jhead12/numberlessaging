@@ -1,24 +1,27 @@
 import Link from 'next/link';
-// import Image from 'next/image'; // Import the Next.js Image component
-// import logo from 'components/numberlessagaing_logo.png'; // Import the image file
-// import { motion } from "framer-motion";
+import React from 'react';
 import Logo from './Logo';
 
-export default function Header({ name }) {
+export default function Header({ name, setSearchQuery }) {
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
   return (
-    
-
     <header className="pt-20 pb-10">
-
       <Logo />
+      {/* <h1>{name}</h1> */}
+      {/* <input
+        type="text"
+        placeholder="Search..."
+        onChange={handleSearchChange}
+        className="w-full p-2 mt-4 mb-4 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      /> */}
       <p className="text-2xl text-center dark:text-white">
         <Link href="/">
           {name}
         </Link>
       </p>
-
-
     </header>
-    
-  )}
+  );
+}
