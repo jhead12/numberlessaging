@@ -12,11 +12,14 @@ A customizable blog starter using:
 ## Todo
 <!-- - Stretch the menu bar to wide screen -->
 - Implement the Wordpress and Graphql
+  - Graphql is not showing up.
 - Change the colors of the background or Add graphics
 - Advertising Policy
 - Add the Logo to Menu Bar
 - Change layout of the page
 - Connecting the notifaction: connecting to a CMS system.
+- Fix the centering of the menu
+- Video Functionality 
 
 
 

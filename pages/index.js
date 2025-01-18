@@ -8,8 +8,19 @@ import Layout, { GradientBackground } from '../components/Layout';
 import ArrowIcon from '../components/ArrowIcon';
 import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
+import VideoPlayer from '../components/VideoPlayer';
 
 export default function Index({ posts, globalData }) {
+  const videoJsOptions = {
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [{
+      src: 'https://path/to/your/video.mp4',
+      type: 'video/mp4'
+    }]
+  };
+
   return (
     <Layout>
       <SEO title={globalData.name} description={globalData.blogTitle} />
@@ -18,6 +29,7 @@ export default function Index({ posts, globalData }) {
         <h1 className="mb-12 text-3xl text-center lg:text-5xl">
           {globalData.blogTitle}
         </h1>
+        <VideoPlayer options={videoJsOptions} />
         <ul className="w-full">
           {posts.map((post) => (
             <li
@@ -70,6 +82,8 @@ export default function Index({ posts, globalData }) {
     </Layout>
   );
 }
+
+
 
 export function getStaticProps() {
   const posts = getPosts();

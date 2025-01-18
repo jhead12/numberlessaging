@@ -2,6 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { ApolloProvider } from '@apollo/client'; 
 import client from '../utils/apollo-client';
 import '../styles/globals.css';
+import 'video.js/dist/video-js.css';
 import 'prismjs/themes/prism-tomorrow.css';
 
 function MyApp({ Component, pageProps }) {
@@ -12,12 +13,7 @@ function MyApp({ Component, pageProps }) {
     <span className="theme-bejamas" />
       <Component {...pageProps} />
       </AnimatePresence>
-      {/* <Component {...pageProps} />  */}
     </ApolloProvider>
-    
-
-  
- 
     </>
   );
 }
