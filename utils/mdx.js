@@ -5,6 +5,11 @@ import matter from 'gray-matter';
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export function getMDXFiles() {
+  if (typeof window !== 'undefined') {
+    // Ensure this code is only executed on the server side
+    return [];
+  }
+
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames
     .filter(fileName => {

@@ -1,39 +1,42 @@
-import { useEffect, useState } from 'react';
-import { fetchPosts } from '../services/api/posts';
-import Link from 'next/link';
-import styles from '../styles/Posts.module.css';
+import { getMDXFiles } from '../lib/mdx';
+import { getWordPressPosts } from '../lib/wordpress';
 
-const Posts = () => {
-  const [posts, setPosts] = useState([]);
+export async function getStaticProps() {
+  const mdxFiles = await getMDXFiles();
+  const wordpressPosts = await getWordPressPosts();
+  const posts = [...mdxFiles, ...wordpressPosts]
+    .map(post => ({
+      title: post.title || 'Untitled',
+      excerpt: typeof post.excerpt === 'string' ? post.excerpt.replace(/<\/?[^>]+(>|$)/g, "") : '',
+      filePath: post.filePath || null,
+      slug: post.slug || null,
+      primaryImage: post.primaryImage || null,
+      date: post.date || null,
+      description: post.description || null,
+      // ...other fields
+    }))
+    .filter(post => post.title && post.title !== 'Untitled'); // Filter out posts with no valid title
 
-  useEffect(() => {
-    const getPosts = async () => {
-      const fetchedPosts = await fetchPosts();
-      console.log('Fetched posts:', fetchedPosts); // Log the fetched posts
-      setPosts(fetchedPosts);
-    };
+  return {
+    props: {
+      posts,
+    },
+  };
+}
 
-    getPosts();
-  }, []);
-
+export default function Posts({ posts }) {
   return (
-    <div className={styles.postsContainer}>
-      <h1 className={styles.title}>Posts</h1>
-      <ul className={styles.postsList}>
-        {posts.length === 0 && <li>No posts found.</li>}
-        {posts.map((post) => (
-          <li key={post.id} className={styles.postItem}>
-            <Link href={`/posts/${post.slug}`}>
-              <a className={styles.postLink}>
-                <h2>{post.title}</h2>
-                <div dangerouslySetInnerHTML={{ __html: post.excerpt }} />
-              </a>
-            </Link>
+    <div>
+      <h1>Posts</h1>
+      <ul>
+        {posts.map((post, index) => (
+          <li key={index}>
+            <h2>{post.title}</h2>
+            <p>{post.date}</p>
+            <p>{post.description}</p>
           </li>
         ))}
       </ul>
     </div>
   );
-};
-
-export default Posts;
+}

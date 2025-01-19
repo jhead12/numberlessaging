@@ -8,8 +8,8 @@ import Layout, { GradientBackground } from '../components/Layout';
 import ArrowIcon from '../components/ArrowIcon';
 import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
-import { getMDXFiles } from '../utils/mdx';
-import { getWordPressPosts } from '../utils/wp-utils';
+import { getMDXFiles } from '../lib/mdx';
+import { getWordPressPosts } from '../lib/wordpress';
 
 export default function Index({ posts, globalData }) {
   const [searchQuery, setSearchQuery] = useState('');
