@@ -6,7 +6,8 @@ import {
   getPostFilePaths,
 } from '../../utils/mdx-utils';
 
-import { MDXRemote } from 'next-mdx-remote';
+import { gql } from '@apollo/client';
+import client from '../../utils/apollo-client';
 import Head from 'next/head';
 import Link from 'next/link';
 import ArrowIcon from '../../components/ArrowIcon';
@@ -16,61 +17,54 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
+import { useRouter } from 'next/router';
+import { MDXRemote } from 'next-mdx-remote';
+import styles from '../../styles/Post.module.css';
 
-// Custom components/renderers to pass to MDX.
-// Since the MDX files aren't loaded by webpack, they have no knowledge of how
-// to handle import statements. Instead, you must include components in scope
-// here.
-const components = {
-  a: CustomLink,
-  // It also works with dynamically-imported components, which is especially
-  // useful for conditionally loading components for certain routes.
-  // See the notes in README.md for more details.
-  Head,
-  img: CustomImage
-};
+const PostPage = ({ post, globalData, prevPost, nextPost }) => {
+  const router = useRouter();
 
-export default function PostPage({
-  source,
-  frontMatter,
-  prevPost,
-  nextPost,
-  globalData,
-  slug
-}) {
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
+  if (!post) {
+    return <div>Post not found</div>;
+  }
 
   return (
     <Layout>
       <SEO
-        title={`${frontMatter.title} - ${globalData.name}`}
-        description={frontMatter.description}
+        title={`${post.title} - ${globalData.name}`}
+        description={post.excerpt || ''}
       />
       <Header name={globalData.name} />
-      <article className="px-6 md:px-0" data-sb-object-id={`posts/${slug}.mdx`}>
+      <article className="px-6 md:px-0">
         <header>
-          <h1 className="mb-12 text-3xl text-center md:text-5xl dark:text-white" data-sb-field-path="title">
-            {frontMatter.title}
+          <h1 className="mb-12 text-3xl text-center md:text-5xl dark:text-white">
+            {post.title}
           </h1>
-
-        
-          
-          {frontMatter.description && (
-            <p className="mb-4 text-xl" data-sb-field-path="description">{frontMatter.description}</p>
+          {post.excerpt && (
+            <p className="mb-4 text-xl" dangerouslySetInnerHTML={{ __html: post.excerpt }} />
           )}
-         
         </header>
         <main>
-          <article className="prose dark:prose-dark" data-sb-field-path="markdown_content">
-            <MDXRemote {...source} components={components} />
-          </article>
+          {post.content && (
+            <article className="prose dark:prose-dark">
+              {typeof post.content === 'string' ? (
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              ) : (
+                <MDXRemote {...post.content} />
+              )}
+            </article>
+          )}
         </main>
         <div className="grid mt-12 md:grid-cols-2 lg:-mx-24">
           {prevPost && (
-            (<Link
+            <Link
               href={`/posts/${prevPost.slug}`}
-              className="flex flex-col px-10 py-8 text-center transition bg-white border border-gray-800 md:text-right first:rounded-t-lg md:first:rounded-tr-none md:first:rounded-l-lg last:rounded-r-lg first last:rounded-b-lg backdrop-blur-lg dark:bg-black dark:bg-opacity-30 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-50 dark:border-white border-opacity-10 dark:border-opacity-10 last:border-t md:border-r-0 md:last:border-r md:last:rounded-r-none">
-
+              className="flex flex-col px-10 py-8 text-center transition bg-white border border-gray-800 md:text-right first:rounded-t-lg md:first:rounded-tr-none md:first:rounded-l-lg last:rounded-r-lg first last:rounded-b-lg backdrop-blur-lg dark:bg-black dark:bg-opacity-30 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-50 dark:border-white border-opacity-10 dark:border-opacity-10 last:border-t md:border-r-0 md:last:border-r md:last:rounded-r-none"
+            >
               <p className="mb-4 text-gray-500 uppercase dark:text-white dark:opacity-60">
                 Previous
               </p>
@@ -78,14 +72,13 @@ export default function PostPage({
                 {prevPost.title}
               </h4>
               <ArrowIcon className="mx-auto mt-auto transform rotate-180 md:mr-0" />
-
-            </Link>)
+            </Link>
           )}
           {nextPost && (
-            (<Link
+            <Link
               href={`/posts/${nextPost.slug}`}
-              className="flex flex-col px-10 py-8 text-center transition bg-white border border-t-0 border-b-0 border-gray-800 md:text-left md:first:rounded-t-lg last:rounded-b-lg first:rounded-l-lg md:last:rounded-bl-none md:last:rounded-r-lg backdrop-blur-lg dark:bg-black dark:bg-opacity-30 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-50 dark:border-white border-opacity-10 dark:border-opacity-10 first:border-t first:rounded-t-lg md:border-t last:border-b">
-
+              className="flex flex-col px-10 py-8 text-center transition bg-white border border-t-0 border-b-0 border-gray-800 md:text-left md:first:rounded-t-lg last:rounded-b-lg first:rounded-l-lg md:last:rounded-bl-none md:last:rounded-r-lg backdrop-blur-lg dark:bg-black dark:bg-opacity-30 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-50 dark:border-white border-opacity-10 dark:border-opacity-10 first:border-t first:rounded-t-lg md:border-t last:border-b"
+            >
               <p className="mb-4 text-gray-500 uppercase dark:text-white dark:opacity-60">
                 Next
               </p>
@@ -93,8 +86,7 @@ export default function PostPage({
                 {nextPost.title}
               </h4>
               <ArrowIcon className="mx-auto mt-auto md:ml-0" />
-
-            </Link>)
+            </Link>
           )}
         </div>
       </article>
@@ -109,35 +101,101 @@ export default function PostPage({
       />
     </Layout>
   );
-}
+};
+
+export default PostPage;
 
 export const getStaticProps = async ({ params }) => {
   const globalData = getGlobalData();
-  const { mdxSource, data } = await getPostBySlug(params.slug);
-  const prevPost = getPreviousPostBySlug(params.slug);
-  const nextPost = getNextPostBySlug(params.slug);
 
-  return {
-    props: {
-      globalData,
-      source: mdxSource,
-      frontMatter: data,
-      slug: params.slug,
-      prevPost,
-      nextPost,
-    },
-  };
+  try {
+    // Fetch WordPress post
+    const { data } = await client.query({
+      query: gql`
+        query GetPostBySlug($slug: String!) {
+          postBy(slug: $slug) {
+            title
+            slug
+            excerpt
+            content
+          }
+        }
+      `,
+      variables: { slug: params.slug },
+    });
+
+    const wpPost = data.postBy;
+
+    // If WordPress post is found, use it
+    if (wpPost) {
+      const prevPost = await getPreviousPostBySlug(params.slug);
+      const nextPost = await getNextPostBySlug(params.slug);
+
+      return {
+        props: {
+          globalData,
+          post: wpPost,
+          prevPost,
+          nextPost,
+        },
+      };
+    }
+
+    // Fetch MDX post if WordPress post is not found
+    const { mdxSource, data: mdxData } = await getPostBySlug(params.slug);
+
+    const post = { title: mdxData.title, excerpt: mdxData.excerpt || null, content: mdxSource };
+
+    const prevPost = await getPreviousPostBySlug(params.slug);
+    const nextPost = await getNextPostBySlug(params.slug);
+
+    return {
+      props: {
+        globalData,
+        post,
+        prevPost,
+        nextPost,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export const getStaticPaths = async () => {
-  const paths = getPostFilePaths()
-    // Remove file extensions for page paths
-    .map((path) => path.replace(/\.mdx?$/, ''))
-    // Map the path into the static paths object required by Next.js
-    .map((slug) => ({ params: { slug } }));
+  try {
+    const { data } = await client.query({
+      query: gql`
+        query GetAllPosts {
+          posts {
+            nodes {
+              slug
+            }
+          }
+        }
+      `,
+    });
 
-  return {
-    paths,
-    fallback: false,
-  };
+    const wpPaths = data.posts.nodes.map((post) => ({
+      params: { slug: post.slug },
+    }));
+
+    const mdxPaths = getPostFilePaths()
+      .map((path) => path.replace(/\.mdx?$/, ''))
+      .map((slug) => ({ params: { slug } }));
+
+    return {
+      paths: [...wpPaths, ...mdxPaths],
+      fallback: true,
+    };
+  } catch (error) {
+    console.error('Error fetching paths:', error);
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
 };

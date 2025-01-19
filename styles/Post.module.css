@@ -1,0 +1,13 @@
+.postContainer {
+  padding: 20px;
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.content {
+  font-size: 1.2em;
+  line-height: 1.6;
+}

@@ -1,0 +1,26 @@
+.postsContainer {
+  padding: 20px;
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.postsList {
+  list-style: none;
+  padding: 0;
+}
+
+.postItem {
+  margin-bottom: 10px;
+}
+
+.postLink {
+  text-decoration: none;
+  color: #0070f3;
+}
+
+.postLink:hover {
+  text-decoration: underline;
+}
