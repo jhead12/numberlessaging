@@ -12,7 +12,7 @@ export async function getStaticProps() {
       slug: post.slug || null,
       primaryImage: post.primaryImage || null,
       date: post.date || null,
-      description: post.description || null,
+      description: typeof post.description === 'string' ? post.description.replace(/<\/?p[^>]*>/g, "") : '',
       // ...other fields
     }))
     .filter(post => post.title && post.title !== 'Untitled'); // Filter out posts with no valid title

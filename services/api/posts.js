@@ -2,8 +2,9 @@ import { gql } from '@apollo/client';
 import client from '../../utils/apollo-client';
 import { getPosts as getMdxPosts } from '../../utils/mdx-utils';
 
-export const fetchPosts = async () => {
-  try {
+const FetchPosts = () => {
+  const fetchPosts = async () => {
+    try {
     // Fetch WordPress posts
     const { data } = await client.query({
       query: gql`
@@ -43,3 +44,8 @@ export const fetchPosts = async () => {
     return [];
   }
 };
+
+  return <div>{fetchPosts()}</div>;
+};
+
+export default FetchPosts; // Default export

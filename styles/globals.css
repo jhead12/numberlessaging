@@ -3,17 +3,37 @@
 @tailwind utilities;
 @tailwind variants;
 
-h1,
-h2,
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merriweather:wght@400;700&display=swap');
+
+:root {
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Merriweather', serif;
+  --font-size-base: 18px;
+  --font-size-lg: 24px;
+  --font-size-xl: 32px;
+}
+
+h1 {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xl);
+}
+
+h2 {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-lg);
+}
+
 h3,
 h4,
 h5,
 h6 {
   font-family: var(--font-primary);
+  font-size: var(--font-size-base);
 }
 
 body {
   font-family: var(--font-secondary);
+  font-size: var(--font-size-base);
 }
 
 .fade-enter {

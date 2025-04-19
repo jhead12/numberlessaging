@@ -25,7 +25,9 @@ export default function Login() {
         password,
       });
       localStorage.setItem('token', response.data.token);
-      router.push('/');
+      const redirectTo = localStorage.getItem('redirectTo') || '/';
+      localStorage.removeItem('redirectTo');
+      router.push(redirectTo);
     } catch (err) {
       console.error('Login error:', err.response ? err.response.data : err.message);
       setError('Invalid username or password');

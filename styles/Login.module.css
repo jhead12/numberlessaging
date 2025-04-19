@@ -44,3 +44,18 @@
 .button:hover {
   background-color: #005bb5;
 }
+
+.resetLinkContainer {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.resetLink {
+  color: #0070f3;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.resetLink:hover {
+  color: #005bb5;
+}

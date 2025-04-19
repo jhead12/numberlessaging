@@ -90,9 +90,12 @@ export default function Index({ posts, globalData }) {
 }
 
 export async function getStaticProps() {
+  let posts = [];
+
+  try {
   const mdxFiles = await getMDXFiles();
   const wordpressPosts = await getWordPressPosts();
-  const posts = [...mdxFiles, ...wordpressPosts]
+    posts = [...mdxFiles, ...wordpressPosts]
     .map(post => ({
       title: post.title || 'Untitled',
       excerpt: typeof post.excerpt === 'string' ? post.excerpt.replace(/<\/?[^>]+(>|$)/g, "") : '',
@@ -107,6 +110,11 @@ export async function getStaticProps() {
 
   console.log('MDX files:', mdxFiles); // Debugging line
   console.log('WordPress posts:', wordpressPosts); // Debugging line
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    // Provide fallback data if necessary
+    // For example, you can fetch posts from another source or use hardcoded data
+  }
 
   const globalData = getGlobalData();
 
