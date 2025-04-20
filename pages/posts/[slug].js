@@ -5,31 +5,42 @@ import {
   getPreviousPostBySlug,
   getPostFilePaths,
 } from '../../utils/mdx-utils';
-
 import { gql } from '@apollo/client';
 import client from '../../utils/apollo-client';
-import Head from 'next/head';
 import Link from 'next/link';
 import ArrowIcon from '../../components/ArrowIcon';
-import CustomImage from '../../components/CustomImage';
-import CustomLink from '../../components/CustomLink';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
 import { useRouter } from 'next/router';
 import { MDXRemote } from 'next-mdx-remote';
-import styles from '../../styles/Post.module.css';
+import { serialize } from 'next-mdx-remote/serialize';
+
+// Custom MDX components (optional, extend as needed)
+const mdxComponents = {
+  h1: (props) => <h1 className="text-4xl font-bold" {...props} />,
+  p: (props) => <p className="my-4" {...props} />,
+  // Add more components as needed
+};
 
 const PostPage = ({ post, globalData, prevPost, nextPost }) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return (
+      <Layout>
+        <div className="text-center py-12">Loading...</div>
+      </Layout>
+    );
   }
 
   if (!post) {
-    return <div>Post not found</div>;
+    return (
+      <Layout>
+        <div className="text-center py-12">Post not found</div>
+      </Layout>
+    );
   }
 
   return (
@@ -45,19 +56,20 @@ const PostPage = ({ post, globalData, prevPost, nextPost }) => {
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="mb-4 text-xl" dangerouslySetInnerHTML={{ __html: post.excerpt }} />
+            <p
+              className="mb-4 text-xl"
+              dangerouslySetInnerHTML={{ __html: post.excerpt }}
+            />
           )}
         </header>
         <main>
-          {post.content && (
-            <article className="prose dark:prose-dark">
-              {typeof post.content === 'string' ? (
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-              ) : (
-                <MDXRemote {...post.content} />
-              )}
-            </article>
-          )}
+          <article className="prose dark:prose-dark">
+            {post.source === 'mdx' ? (
+              <MDXRemote {...post.content} components={mdxComponents} />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            )}
+          </article>
         </main>
         <div className="grid mt-12 md:grid-cols-2 lg:-mx-24">
           {prevPost && (
@@ -103,8 +115,6 @@ const PostPage = ({ post, globalData, prevPost, nextPost }) => {
   );
 };
 
-export default PostPage;
-
 export const getStaticProps = async ({ params }) => {
   const globalData = getGlobalData();
 
@@ -126,25 +136,41 @@ export const getStaticProps = async ({ params }) => {
 
     const wpPost = data.postBy;
 
-    // If WordPress post is found, use it
     if (wpPost) {
+      // For WordPress posts, fetch prev/next from MDX utils (assuming slugs are unique across sources)
       const prevPost = await getPreviousPostBySlug(params.slug);
       const nextPost = await getNextPostBySlug(params.slug);
 
       return {
         props: {
           globalData,
-          post: wpPost,
-          prevPost,
-          nextPost,
+          post: {
+            ...wpPost,
+            source: 'wordpress', // Add source identifier
+          },
+          prevPost: prevPost || null,
+          nextPost: nextPost || null,
         },
+        revalidate: 60, // Optional: ISR for WordPress posts
       };
     }
 
     // Fetch MDX post if WordPress post is not found
-    const { mdxSource, data: mdxData } = await getPostBySlug(params.slug);
+    const mdxPost = await getPostBySlug(params.slug);
 
-    const post = { title: mdxData.title, excerpt: mdxData.excerpt || null, content: mdxSource };
+    if (!mdxPost) {
+      return {
+        notFound: true,
+      };
+    }
+
+    // Serialize MDX content for rendering
+    const mdxSource = await serialize(mdxPost.content, {
+      mdxOptions: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+      },
+    });
 
     const prevPost = await getPreviousPostBySlug(params.slug);
     const nextPost = await getNextPostBySlug(params.slug);
@@ -152,13 +178,19 @@ export const getStaticProps = async ({ params }) => {
     return {
       props: {
         globalData,
-        post,
-        prevPost,
-        nextPost,
+        post: {
+          title: mdxPost.data.title,
+          excerpt: mdxPost.data.excerpt || null,
+          content: mdxSource,
+          slug: params.slug,
+          source: 'mdx', // Add source identifier
+        },
+        prevPost: prevPost || null,
+        nextPost: nextPost || null,
       },
     };
   } catch (error) {
-    console.error('Error fetching post:', error);
+    console.error('Error fetching post:', error.message);
     return {
       notFound: true,
     };
@@ -167,6 +199,7 @@ export const getStaticProps = async ({ params }) => {
 
 export const getStaticPaths = async () => {
   try {
+    // Fetch WordPress post slugs
     const { data } = await client.query({
       query: gql`
         query GetAllPosts {
@@ -183,19 +216,22 @@ export const getStaticPaths = async () => {
       params: { slug: post.slug },
     }));
 
-    const mdxPaths = getPostFilePaths()
-      .map((path) => path.replace(/\.mdx?$/, ''))
-      .map((slug) => ({ params: { slug } }));
+    // Fetch MDX post slugs
+    const mdxPaths = getPostFilePaths().map((slug) => ({
+      params: { slug },
+    }));
 
     return {
       paths: [...wpPaths, ...mdxPaths],
-      fallback: true,
+      fallback: 'blocking', // Use 'blocking' for better SEO and UX
     };
   } catch (error) {
-    console.error('Error fetching paths:', error);
+    console.error('Error fetching paths:', error.message);
     return {
       paths: [],
-      fallback: true,
+      fallback: 'blocking',
     };
   }
 };
+
+export default PostPage;
